@@ -3,7 +3,7 @@ from django.db import models
 
 class User(models.Model):
 
-    ID = models.AutoField(primary_key=True)
+    ID = models.AutoField(primary_key=True, db_index=True)
     Username = models.CharField(max_length=30, unique=True)
     TrueName = models.CharField(max_length=40)
 
