@@ -7,7 +7,10 @@ info:
 paths:
   /friends/user:
     get:
-      summary: get all registered users
+      summary: |
+        get all registered users. \
+        sends info about them because there shouldn't be \
+        too many users.
       responses:
         '200':
           description: OK
@@ -44,7 +47,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
-        '400':
+        '4XX':
           description: some error
           content:
             application/json:
@@ -67,7 +70,206 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
-        '404':
+        '4XX':
+          description: some error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorWithPayload"
+                
+  /friends/request:
+    post:
+      summary: create a friendship request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                auth_info:
+                  $ref: "#/components/schema/AuthInfo"
+                user_id:
+                  type: integer
+              required:
+                - auth_info
+                - user_id
+      responses:
+        '200':
+          description: |
+            OK. Returns just 200 if reverse friendship request exists \
+            or friendship request info otherwise
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FriendshipRequest"
+        '4XX':
+          description: some error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorWithPayload"
+
+    get:
+      summary: get incoming or outcoming friendship requests
+      parameters:
+        - in: query
+          name: request_type
+          required: true
+          schema:
+            type: string
+            enum:
+              - incoming
+              - outcoming
+        - in: query
+          name: user_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requests:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/FriendshipRequest"
+        '4XX':
+          description: some error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorWithPayload"
+                
+  /friends/answer_request:
+    post:
+      summary: accept or decline friendship request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                auth_info:
+                  $ref: "#/components/schema/AuthInfo"
+                request_id:
+                  type: integer
+                action:
+                  type: string
+                  enum:
+                    - accept
+                    - decline
+              required:
+                - auth_info
+                - request_id
+                - action
+      responses:
+        '200':
+          description: OK
+        '4XX':
+          description: some error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorWithPayload"
+                
+  /friends/friends/{id}:
+    get:
+      summary: get all the friends of current user
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  friends:
+                    $ref: "#/components/schemas/UserIDs"
+        '4XX':
+          description: some error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorWithPayload"
+
+  /friends/friends:
+    delete:
+      summary: remove user from friends
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                auth_info:
+                  $ref: "#/components/schema/AuthInfo"
+                user_id:
+                  type: integer
+              required:
+                - auth_info
+                - user_id
+      responses:
+        '200':
+          description: OK
+        '4XX':
+          description: some error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorWithPayload"
+
+  /friends/status:
+    get:
+      summary: |
+        get user relationship (incoming/outcoming friendship request, or \
+        friends, or none of this)
+      parameters:
+        - in: query
+          name: id
+          description: current user id
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: user_id
+          description: other user id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: |
+            OK. Returns friendship request if status is incoming/outcoming.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - friends
+                      - incoming
+                      - outcoming
+                      - none
+                  request_id:
+                    type: integer
+                required:
+                  - status
+        '4XX':
           description: some error
           content:
             application/json:
@@ -85,6 +287,27 @@ components:
           type: string
         true_name:
           type: string
+          
+    FriendshipRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+        sender_id:
+          type: integer
+        receiver_id:
+          type: integer
+          
+    UserIDs:
+      type: array
+      items:
+        type: integer
+        
+    AuthInfo:
+      type: object
+      properties:
+        id:
+          type: integer
 
     ErrorWithPayload:
       type: object
