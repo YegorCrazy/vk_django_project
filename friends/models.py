@@ -10,6 +10,11 @@ class User(models.Model):
     def __str__(self):
         return self.Username
 
+    def ToDict(self):
+        return {'id': self.ID,
+                'username': self.Username,
+                'true_name': self.TrueName}
+
 
 class FriendshipRequest(models.Model):
 

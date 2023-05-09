@@ -6,6 +6,20 @@ info:
 
 paths:
   /friends/user:
+    get:
+      summary: get all registered users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/User"
     post:
       summary: create a new user
       requestBody:
@@ -59,7 +73,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorWithPayload"
-                
+
 components:
   schemas:
     User:
