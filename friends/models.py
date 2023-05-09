@@ -29,6 +29,11 @@ class FriendshipRequest(models.Model):
     def __str__(self):
         return self.Sender.Username + '->' + self.Receiver.Username
 
+    def ToDict(self):
+        return {'id': self.ID,
+                'sender_id': self.Sender.ID,
+                'receiver_id': self.Receiver.ID}
+
 
 class Friendship(models.Model):
 
