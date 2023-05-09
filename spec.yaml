@@ -7,6 +7,7 @@ info:
 paths:
   /friends/user:
     post:
+      summary: create a new user
       requestBody:
         required: true
         content:
@@ -38,6 +39,7 @@ paths:
 
   /friends/user/{id}:
     get:
+      summary: get user info using id
       parameters:
         - in: path
           name: id
