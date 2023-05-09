@@ -1,0 +1,79 @@
+openapi: 3.0.0
+
+info:
+  title: a simple friends service
+  version: 1.0.0
+
+paths:
+  /friends/user:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                true_name:
+                  type: string
+                  description: real person's name and surname
+              required:
+                - username
+                - true_name
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '400':
+          description: some error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorWithPayload"
+
+  /friends/user/{id}:
+    get:
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '404':
+          description: some error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorWithPayload"
+                
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        true_name:
+          type: string
+
+    ErrorWithPayload:
+      type: object
+      properties:
+        code:
+          type: integer
+        payload:
+          type: string
