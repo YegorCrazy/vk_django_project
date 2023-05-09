@@ -13,6 +13,7 @@ class User(models.Model):
 
 class FriendshipRequest(models.Model):
 
+    ID = models.AutoField(primary_key=True, db_index=True)
     Sender = models.ForeignKey(User, on_delete=models.CASCADE,
                                related_name='outcoming_requests',
                                db_index=True)
