@@ -1,0 +1,9 @@
+version: "2"
+services:
+  server:
+    build: .
+    image: brightnkov/friends-service
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./db.sqlite3:/work/server/db.sqlite3
