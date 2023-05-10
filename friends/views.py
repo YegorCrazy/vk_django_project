@@ -24,6 +24,11 @@ class UserView(View):
                                  'payload': 'some of fields are missing'},
                                 status=400)
 
+        if len(User.objects.filter(Username=username)) > 0:
+            return JsonResponse({'code': 86,
+                                 'payload': 'username occupied'},
+                                status=400)
+
         new_user = User(Username=username, TrueName=true_name)
 
         try:
@@ -80,6 +85,11 @@ class FriendshipRequestView(View):
         except Exception:
             return JsonResponse({'code': 79,
                                  'payload': 'user not found'},
+                                status=404)
+
+        if sender == receiver:
+            return JsonResponse({'code': 87,
+                                 'payload': 'request to same user'},
                                 status=404)
 
         friendships = (Friendship.objects.filter(Friend1=sender)
