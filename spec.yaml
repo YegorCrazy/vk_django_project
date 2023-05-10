@@ -100,7 +100,8 @@ paths:
         '200':
           description: |
             OK. Returns just 200 if reverse friendship request exists \
-            or friendship request info otherwise
+            or existing friendship request info if exists \
+            or new friendship request info otherwise
           content:
             application/json:
               schema:
@@ -227,7 +228,7 @@ paths:
                 - user_id
       responses:
         '200':
-          description: OK
+          description: OK. If users were not friends nothing happens.
         '4XX':
           description: some error
           content:
