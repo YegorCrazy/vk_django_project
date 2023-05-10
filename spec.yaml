@@ -91,6 +91,8 @@ paths:
                   $ref: "#/components/schema/AuthInfo"
                 user_id:
                   type: integer
+                  description: |
+                    id of user that current user wants to send friendship request
               required:
                 - auth_info
                 - user_id
@@ -218,6 +220,8 @@ paths:
                   $ref: "#/components/schema/AuthInfo"
                 user_id:
                   type: integer
+                  description: |
+                    id of user to be removed from friends
               required:
                 - auth_info
                 - user_id
