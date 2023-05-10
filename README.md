@@ -9,6 +9,12 @@ python3 manage.py migrate
 python3 manage.py runserver
 ```
 
+**Запуск тестов:**
+
+```
+python3 manage.py test friends
+```
+
 Спецификация API в формате .yaml содержится в файле spec.yaml.
 
 **Примеры использования API:**
@@ -25,9 +31,11 @@ python3 manage.py runserver
    }'`
    Ответ:
    `{
+   
        "id": 1,
        "username": "brightnkov",
        "true_name": "yegor britenkov"
+   
    }`
 
 2) Получение данных о пользователе:
@@ -45,6 +53,7 @@ python3 manage.py runserver
      --url http://localhost:8000/friends/user/`
    Ответ:
    `{
+   
        "users": [
            {
                "id": 1,
@@ -57,6 +66,7 @@ python3 manage.py runserver
                "true_name": "arina rodionova"
            }
        ]
+   
    }`
 
 4) Отправление запроса дружбы:
@@ -64,16 +74,20 @@ python3 manage.py runserver
      --url http://localhost:8000/friends/request/ \
      --header 'Content-Type: application/json' \
      --data '{
+   
        "auth_info": {
            "id": 1
        },
        "user_id": 2
+   
    }'`
    Ответ:
    `{
+   
        "id": 1,
        "sender_id": 1,
        "receiver_id": 2
+   
    }`
 
 5) Получение информации о входящих/исходящих запросах дружбы:
@@ -81,6 +95,7 @@ python3 manage.py runserver
      --url 'http://localhost:8000/friends/request/?request_type=incoming&user_id=2'`
    Ответ:
    `{
+   
        "requests": [
            {
                "id": 1,
@@ -88,6 +103,7 @@ python3 manage.py runserver
                "receiver_id": 2
            }
        ]
+   
    }`
 
 6) Ответ на запрос дружбы:
@@ -95,11 +111,13 @@ python3 manage.py runserver
      --url http://localhost:8000/friends/answer_request/ \
      --header 'Content-Type: application/json' \
      --data '{
+   
        "auth_info": {
            "id": 2
        },
        "request_id": 1,
        "action": "accept"
+   
    }'`
    В ответе приходит только код 200.
 
@@ -108,9 +126,11 @@ python3 manage.py runserver
      --url http://localhost:8000/friends/friends/1/`
    Ответ:
    `{
+   
        "friends": [
            2
        ]
+   
    }`
 
 8) Удаление друга:
@@ -118,10 +138,12 @@ python3 manage.py runserver
      --url http://localhost:8000/friends/friends/ \
      --header 'Content-Type: application/json' \
      --data '{
+   
        "auth_info": {
            "id": 2
        },
        "user_id": 1
+   
    }'`
    В ответе приходит только код 200.
 
@@ -130,7 +152,7 @@ python3 manage.py runserver
      --url 'http://localhost:8000/friends/status/?id=1&user_id=2'`
    Ответ:
    `{
+   
        "status": "none"
+   
    }`
-
-
